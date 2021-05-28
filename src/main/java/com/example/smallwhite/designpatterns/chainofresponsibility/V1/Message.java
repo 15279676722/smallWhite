@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.chainofresponsibility.V1;import lombok.AllArgsConstructor;import lombok.Data;import lombok.ToString;/** * @author: yangqiang * @create: 2021-02-27 14:24 */@Data@AllArgsConstructor@ToStringpublic class Message {    String name;    String msg;}

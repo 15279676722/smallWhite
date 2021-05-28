@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.mediator.V2;/** * @author: yangqiang * @create: 2021-03-01 20:38 */public class Tester extends TeamMember {    public Tester(String name) {        super(name);        this.role = TeamMember.QA;    }    @Override    public void dailyWork() {        System.out.println("我是一名测试，我找出bug，确保代码质量。");    }}

@@ -1,0 +1,1 @@
+package com.example.smallwhite.thread;/** * @author: yangqiang * @create: 2021-03-08 19:57 */public class ThreadTest {    public static void main(String[] args) {        new Thread(new MyThread1(),"1").start();        new Thread(new MyThread2(),"2").start();    }}

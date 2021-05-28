@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.state;/** * @author: yangqiang * @create: 2021-03-02 19:55 */public class L1State implements MembershipState {    @Override    public void refund() {        System.out.println("1级会员，退半款");    }    @Override    public void purchase() {        System.out.println("1级会员，购买打8折");    }}

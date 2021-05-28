@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.chainofresponsibility.V1;/** * @author: yangqiang * @create: 2021-02-27 14:32 */public class SensitiveFilter implements Filter{    @Override    public boolean doFilter(Message msg) {        String r = msg.getMsg();        r = r.replaceAll("996", "955");        msg.setMsg(r);        return true;    }}

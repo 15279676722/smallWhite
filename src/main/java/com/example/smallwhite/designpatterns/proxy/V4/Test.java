@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.proxy.V4;/** * @author: yangqiang * @create: 2021-02-26 11:18 */public class Test {    public static void main(String[] args) {        CglibProxy cglibProxy = new CglibProxy();        Tank tank =(Tank) cglibProxy.getInstance(new Tank());        tank.move();    }}

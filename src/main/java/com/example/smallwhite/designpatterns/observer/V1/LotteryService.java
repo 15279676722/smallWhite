@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.observer.V1;/** * @author: yangqiang * @create: 2021-03-02 18:47 */public interface LotteryService {    public LotteryResult doDraw(String uId);}

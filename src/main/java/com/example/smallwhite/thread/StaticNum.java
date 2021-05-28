@@ -1,0 +1,1 @@
+package com.example.smallwhite.thread;import java.util.LinkedList;/** * @author: yangqiang * @create: 2021-03-08 20:02 */public class StaticNum {    public static Integer num=0;    /**     * 仓库最大容量     */    public static final int MAX_SIZE = 100;    /**     * 仓库存储的载体     */    public static LinkedList list = new LinkedList();}

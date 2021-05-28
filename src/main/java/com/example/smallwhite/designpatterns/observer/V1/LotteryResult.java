@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.observer.V1;import lombok.AllArgsConstructor;import lombok.Data;import java.util.Date;/** * @author: yangqiang * @create: 2021-03-02 18:48 */@Data@AllArgsConstructorpublic class LotteryResult {    String uId;    String msg;    Date date;}

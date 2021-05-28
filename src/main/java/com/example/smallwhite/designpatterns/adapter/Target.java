@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.adapter;/** * @author: yangqiang * @create: 2021-02-24 10:20 */public interface Target {     void request();}

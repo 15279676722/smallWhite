@@ -1,0 +1,1 @@
+package com.example.smallwhite.basics.finalclass;/** * @author: yangqiang * @create: 2021-04-09 20:41 */public  class TestFinalClass {    public String name;    public final String id ="1111";    public String getName() {        return name;    }    public final void setName(String name) {        this.name = name;    }}

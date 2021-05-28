@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.facade;/** * @author: yangqiang * @create: 2021-02-24 10:15 */public class VideoCard {    public void start(){        System.out.println("video card is open");    }    public void end(){        System.out.println("video card is close");    }}

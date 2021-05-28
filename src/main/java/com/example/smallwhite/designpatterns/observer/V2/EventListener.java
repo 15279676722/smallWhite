@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.observer.V2;import com.example.smallwhite.designpatterns.observer.V1.LotteryResult;/** * @author: yangqiang * @create: 2021-03-02 18:52 */public interface EventListener {    void doEvent(LotteryResult result);}

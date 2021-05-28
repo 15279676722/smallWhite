@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.chainofresponsibility.V1;/** * @author: yangqiang * @create: 2021-02-27 14:42 */public class FaceFilter implements Filter {    @Override    public boolean doFilter(Message message) {        String r = message.getMsg();        r = r.replace(":)","|||");        message.setMsg(r);        return true;    }}

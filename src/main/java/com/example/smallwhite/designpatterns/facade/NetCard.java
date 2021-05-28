@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.facade;/** * @author: yangqiang * @create: 2021-02-24 10:15 */public class NetCard {    public void start(){        System.out.println("net card is open");    }    public void end(){        System.out.println("net card is close");    }}

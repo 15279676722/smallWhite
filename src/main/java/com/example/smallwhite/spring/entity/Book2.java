@@ -1,0 +1,1 @@
+package com.example.smallwhite.spring.entity;import lombok.Data;import lombok.ToString;import org.springframework.stereotype.Component;/** * @author: yangqiang * @create: 2021-04-02 15:46 */@Data@ToString@Componentpublic class Book2 {   public String name;   public String id;}

@@ -1,0 +1,1 @@
+package com.example.smallwhite.utils.mybatis;import lombok.AllArgsConstructor;import lombok.Data;/** * @author: yangqiang * @create: 2021-01-19 15:52 */@Data@AllArgsConstructorpublic class Page {    /**     * 从第几条数据开始查询     * */    public Integer offset;    /**     * 查询多少条数据     * */    public Integer limit;}

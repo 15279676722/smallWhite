@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+    <bean id="testInterfaceImpl" class="com.example.smallwhite.service.TestInterfaceImpl"/>
+    <bean id="minstrel" class="com.example.smallwhite.service.Minstrel"/>
+    <bean id="beanUser" class="com.example.smallwhite.entity.BeanUser">
+        <property name="id" value="1"></property>
+        <property name="beanUsers" ref="beanUsers"></property>
+    </bean>
+    <bean id="beanUsers" class="com.example.smallwhite.entity.BeanUsers">
+        <property name="id" value="1"></property>
+        <property name="beanUser" ref="beanUser"></property>
+    </bean>
+    <aop:config>
+        <aop:aspect ref="minstrel">
+            <aop:pointcut id="myPointcut" expression="execution(* *.testMethod(..))"/>
+            <aop:before method="Before" pointcut-ref="myPointcut"/>
+            <aop:after  method="After"  pointcut-ref="myPointcut"/>
+        </aop:aspect>
+    </aop:config>
+    <bean id="collectionVO" class="com.example.smallwhite.entity.CollectionVO">
+        <property name="list">
+            <list>
+                <value>1</value>
+                <value>2</value>
+                <value>3</value>
+                <value>4</value>
+            </list>
+        </property>
+        <property name="map">
+            <map>
+                <entry key="1" value="1"></entry>
+                <entry key="2" value="2"></entry>
+                <entry key="3" value="3"></entry>
+                <entry key="4" value="4"></entry>
+            </map>
+        </property>
+        <property name="set">
+            <set>
+                <value>1</value>
+                <value>2</value>
+                <value>3</value>
+                <value>4</value>
+            </set>
+        </property>
+    </bean>
+</beans>

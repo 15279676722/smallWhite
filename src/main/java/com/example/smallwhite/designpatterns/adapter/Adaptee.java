@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.adapter;/** * @author: yangqiang * @create: 2021-02-24 10:20 */public class Adaptee {    public void specificRequest() {        System.out.println("适配者中的业务代码被调用！");    }}

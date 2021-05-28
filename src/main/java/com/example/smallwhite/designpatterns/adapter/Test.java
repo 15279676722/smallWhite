@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.adapter;/** * @author: yangqiang * @create: 2021-02-24 10:21 */public class Test {    public static void main(String[] args) {        System.out.println("类适配器模式测试：");        Target target = new Adapter();        target.request();    }}

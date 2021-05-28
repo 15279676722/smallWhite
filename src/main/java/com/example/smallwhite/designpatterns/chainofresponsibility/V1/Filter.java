@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.chainofresponsibility.V1;/** * @author: yangqiang * @create: 2021-02-27 14:30 */public interface Filter {    /**     * msg过滤     * @param message     * @return 是否继续执行责任链     * */    boolean  doFilter(Message message);}

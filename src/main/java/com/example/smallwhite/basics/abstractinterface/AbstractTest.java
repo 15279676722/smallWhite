@@ -1,0 +1,1 @@
+package com.example.smallwhite.basics.abstractinterface;/** * @author: yangqiang * @create: 2021-04-13 14:33 */public class AbstractTest {}

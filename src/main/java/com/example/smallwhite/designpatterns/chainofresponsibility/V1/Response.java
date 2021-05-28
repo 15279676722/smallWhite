@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.chainofresponsibility.V1;import lombok.Data;/** * @author: yangqiang * @create: 2021-02-27 15:02 */@Datapublic class Response {    String Str = "Response";}

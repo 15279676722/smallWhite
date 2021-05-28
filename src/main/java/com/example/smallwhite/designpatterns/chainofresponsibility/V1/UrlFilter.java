@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.chainofresponsibility.V1;/** * @author: yangqiang * @create: 2021-02-27 14:43 */public class UrlFilter implements Filter{    @Override    public boolean doFilter(Message message) {        String r = message.getMsg();        r = r.replace("baidu","4399");        message.setMsg(r);        return false;    }}

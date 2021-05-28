@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.proxy.V2;/** * 有点像装饰器模式了！ * @author: yangqiang * @create: 2021-02-25 22:05 */public class Test {    public static void main(String[] args) {        TimeProxy timeProxy = new TimeProxy(new LogProxy(new Tank()));        timeProxy.move();    }}

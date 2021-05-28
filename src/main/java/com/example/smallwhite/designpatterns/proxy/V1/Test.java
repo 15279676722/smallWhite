@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.proxy.V1;/** * 静态代理优点: 符合开闭原则的情况下对目标对象进行功能扩展 * 静态代理缺陷: 得为每一个代理对象都得创建代理类 工作量太大 不易管理 同时接口 一旦新增功能 代理类也得跟着变化 * @author: yangqiang * @create: 2021-02-25 22:05 */public class Test {    public static void main(String[] args) {        TimeProxy timeProxy = new TimeProxy();        timeProxy.move();    }}

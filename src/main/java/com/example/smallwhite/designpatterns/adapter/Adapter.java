@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.adapter;/** * @author: yangqiang * @create: 2021-02-24 10:20 */class Adapter extends Adaptee implements Target {    @Override    public void request() {        System.out.println("适配器开始适配请求");        specificRequest();    }}

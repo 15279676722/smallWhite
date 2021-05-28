@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.iterator.V1;/** * 迭代器定义 * @author: yangqiang * @create: 2021-03-01 17:17 */public interface Iterator<E> {    boolean hasNext();    E next();}

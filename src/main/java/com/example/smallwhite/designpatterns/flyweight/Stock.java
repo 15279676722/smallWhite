@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.flyweight;import lombok.AllArgsConstructor;import lombok.Data;/** * @author: yangqiang * @create: 2021-02-24 19:04 */@Data@AllArgsConstructorpublic class Stock {    private int total; // 库存总量    private int used;  // 库存已用    // ...get/set}

@@ -1,0 +1,1 @@
+package com.example.smallwhite.utils.excel.service;import java.util.List;/** * @author: yangqiang * @create: 2020-09-14 14:36 */public interface DownloadService {    /**     * 导入时批量新增数据     * @param data     * @return     */    public boolean excelInsert(List<?> data);}

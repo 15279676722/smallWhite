@@ -1,0 +1,1 @@
+package com.example.smallwhite.basics.staticclass;/** * @author: yangqiang * @create: 2021-04-10 18:08 */public class Test {    public static void main(String[] args) {        TestStaticClass testClass = TestStaticClass.TestClassBuilder.getTestClass();        testClass.setName2("yangqiang");    }}

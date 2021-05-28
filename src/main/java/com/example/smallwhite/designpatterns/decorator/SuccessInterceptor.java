@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.decorator;/** * @author: yangqiang * @create: 2021-02-23 22:58 */public class SuccessInterceptor implements HandlerInterceptor{    @Override    public boolean preHandle(String request, String response, Object handler) {        System.out.println("登录成功");        return true;    }}

@@ -1,0 +1,1 @@
+package com.example.smallwhite.test;/** * @author: yangqiang * @create: 2021-03-30 10:51 */public class Test2 {    public static void main(String[] args) {        System.out.println(47&31);//        101111//        10000    }}

@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.bridge;/** * @author: yangqiang * @create: 2021-02-24 10:31 */public interface IPayMode {    boolean security(String uId);}

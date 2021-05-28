@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.proxy.V4;/** * @author: yangqiang * @create: 2021-02-27 13:29 */public final class Tank {    public void move(){        System.out.println("tank在运动中！");    }}

@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.command;/** * @author: yangqiang * @create: 2021-02-27 16:42 */public class GuangDoneCuisine implements ICuisine {    private ICook cook;    public GuangDoneCuisine(ICook cook) {        this.cook = cook;    }    @Override    public void cook() {        cook.doCooking();    }}

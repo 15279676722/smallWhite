@@ -1,0 +1,1 @@
+package com.example.smallwhite.entity;import lombok.Data;import lombok.ToString;import org.omg.CORBA.TIMEOUT;import java.sql.Timestamp;/** * @author: yangqiang * @create: 2021-03-03 16:49 */@ToString@Datapublic class SuperVO {    public Integer dr;    public Timestamp ts;    public Timestamp createTime;    public Timestamp updateTime;}

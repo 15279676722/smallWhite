@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.state;/** * @author: yangqiang * @create: 2021-03-02 19:55 */public interface MembershipState {    void refund();    void purchase();}

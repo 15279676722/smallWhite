@@ -1,0 +1,1 @@
+package com.example.smallwhite.entity;import lombok.Data;/** * @author: yangqiang * @create: 2020-09-16 14:05 */@Datapublic class MysqlIndexVO {    public Integer id;    public String  transaction_id;    public Integer gross;    public Integer net;    public Integer stock_id;    public String getTableName(){        return "itdragon_order_list";    }}

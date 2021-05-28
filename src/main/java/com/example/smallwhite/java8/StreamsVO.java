@@ -1,0 +1,1 @@
+package com.example.smallwhite.java8;import lombok.AllArgsConstructor;import lombok.Data;import lombok.ToString;/** * @author: yangqiang * @create: 2021-03-05 14:45 */@ToString@Data@AllArgsConstructorpublic class StreamsVO  {     private String id;     private String name;     private Integer age;     private Integer score;}

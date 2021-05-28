@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.bridge;import lombok.extern.slf4j.Slf4j;/** * 密码支付 * @author: yangqiang * @create: 2021-02-24 10:37 */@Slf4jpublic class PayCypher implements IPayMode{    @Override    public boolean security(String uId) {        log.info("密码支付，风控校验环境安全");        return true;    }}

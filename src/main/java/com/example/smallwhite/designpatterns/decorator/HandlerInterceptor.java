@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.decorator;/** * @author: yangqiang * @create: 2021-02-23 22:18 */public interface HandlerInterceptor {    boolean preHandle(String request, String response, Object handler);}

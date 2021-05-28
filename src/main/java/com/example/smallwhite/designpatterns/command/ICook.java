@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.command;/** * @author: yangqiang * @create: 2021-02-27 16:42 */public interface ICook {    /**     * 做菜     * */    void doCooking();}

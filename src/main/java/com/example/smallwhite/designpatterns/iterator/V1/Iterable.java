@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.iterator.V1;/** * 可迭代接口定义 * @author: yangqiang * @create: 2021-03-01 17:17 */public interface Iterable<E> {    Iterator<E> iterator();}

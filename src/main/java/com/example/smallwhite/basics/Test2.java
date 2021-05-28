@@ -1,0 +1,1 @@
+package com.example.smallwhite.basics;/** * @author: yangqiang * @create: 2021-04-09 19:36 */public class Test2 {    public static void main(String[] args) {        Integer i =1;    }}

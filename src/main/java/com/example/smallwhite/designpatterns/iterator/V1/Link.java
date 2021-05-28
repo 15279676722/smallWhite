@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.iterator.V1;import lombok.AllArgsConstructor;import lombok.Data;/** * @author: yangqiang * @create: 2021-03-01 17:16 */@Data@AllArgsConstructorpublic class Link {    private String fromId; // 雇员ID    private String toId;   // 雇员ID}

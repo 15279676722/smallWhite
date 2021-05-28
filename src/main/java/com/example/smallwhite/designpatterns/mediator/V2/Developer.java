@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.mediator.V2;/** * @author: yangqiang * @create: 2021-03-01 20:38 */public class Developer extends TeamMember {    public Developer(String name) {        super(name);        this.role = TeamMember.RD;    }    @Override    public void dailyWork() {        System.out.println("我是一个码农，我经常加班写代码，困了累了可能写出bug来。");    }}

@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.iterator.V1;/** * 集合功能接口定义 * @author: yangqiang * @create: 2021-03-01 17:18 */public interface Collection<E, L> extends Iterable<E> {    boolean add(E e);    boolean remove(E e);    boolean addLink(String key, L l);    boolean removeLink(String key);    Iterator<E> iterator();}

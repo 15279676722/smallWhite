@@ -1,0 +1,1 @@
+package com.example.smallwhite.designpatterns.composite;/** * @author: yangqiang * @create: 2021-02-24 19:49 */public class ImagerFile extends File{    public ImagerFile(String name) {        super(name);    }    @Override    public void display() {        System.out.println("这是图像文件，文件名：" + super.getName());    }}
