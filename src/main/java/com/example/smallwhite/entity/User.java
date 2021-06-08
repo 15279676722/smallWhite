@@ -1,0 +1,1 @@
+package com.example.smallwhite.entity;import lombok.AllArgsConstructor;import lombok.Data;/** * @author: yangqiang * @create: 2021-05-31 14:57 */@Data@AllArgsConstructorpublic class User {    private Long id;    private String name;    private Integer age;    private String email;}

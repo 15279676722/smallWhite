@@ -1,0 +1,1 @@
+package com.example.smallwhite.mybatis.dao;import com.baomidou.mybatisplus.core.mapper.BaseMapper;import com.example.smallwhite.entity.User;/** * @author: yangqiang * @create: 2021-05-31 14:57 */public interface UserMapper extends BaseMapper<User> {}
