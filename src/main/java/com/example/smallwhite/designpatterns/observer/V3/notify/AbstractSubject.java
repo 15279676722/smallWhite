@@ -4,6 +4,8 @@ import com.example.smallwhite.designpatterns.observer.V3.event.AbstractSwitchDoo
 import com.example.smallwhite.designpatterns.observer.V3.event.Observed;
 import org.reflections.Reflections;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,8 @@ public class AbstractSubject {
 
     public static void initObserver(Class<? extends AbstractObserver> clazz) throws InstantiationException, IllegalAccessException {
         Subscribe annotation = clazz.getAnnotation(Subscribe.class);
+        ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericSuperclass();
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
         if(annotation!=null){
             observerList.add(clazz.newInstance());
         }
