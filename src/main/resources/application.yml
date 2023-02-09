@@ -39,8 +39,8 @@ spring:
     publisher-returns: true
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.example.babysrj.mybatis.entity
+  type-aliases-package: com.example.mybatis.entity
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-entity-package: com.example.babysrj.entity
+entity-package: com.example.entity

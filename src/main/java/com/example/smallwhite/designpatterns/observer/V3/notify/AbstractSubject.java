@@ -36,8 +36,6 @@ public class AbstractSubject {
 
     public static void initObserver(Class<? extends AbstractObserver> clazz) throws InstantiationException, IllegalAccessException {
         Subscribe annotation = clazz.getAnnotation(Subscribe.class);
-        ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericSuperclass();
-        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
         if(annotation!=null){
             observerList.add(clazz.newInstance());
         }
