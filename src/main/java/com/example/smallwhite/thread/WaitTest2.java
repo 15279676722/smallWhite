@@ -1,12 +1,13 @@
 package com.example.smallwhite.thread;
 
-import lombok.SneakyThrows;
-
 public class WaitTest2 {
+
+
+
     public static void main(String[] args) {
-        MyWaitTest thread1 = new MyWaitTest("thread-1");
-        MyWaitTest thread2 = new MyWaitTest("thread-2");
-        MyWaitTest thread3 = new MyWaitTest("thread-3");
+        MyWaitThread thread1 = new MyWaitThread("thread-1");
+        MyWaitThread thread2 = new MyWaitThread("thread-2");
+        MyWaitThread thread3 = new MyWaitThread("thread-3");
 
 
         thread1.start();
@@ -15,30 +16,44 @@ public class WaitTest2 {
 
     }
 
-    static class MyWaitTest extends Thread {
-        private static Integer count = 0;
+    static class MyWaitThread extends Thread {
 
-        @SneakyThrows
+        private static Object obj = new Object();
+
+        private static volatile Integer count = 0;
+
         @Override
         public void run() {
 
             String name = currentThread().getName();
-            synchronized (count) {
-                while (count<100){
+            while (count < 100) {
+
+                synchronized (obj) {
+                    obj.notifyAll();
                     String[] split = name.split("-");
                     if (split.length < 2) {
-                        throw new Exception("length must more than 2");
+                        try {
+                            throw new Exception("length must more than 2");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     Integer index = Integer.valueOf(split[1]);
 
-                    int remainder = count + 1 % 3;
+                    int remainder = (count + 1) % 3;
 
-                    if (index == remainder && count < 100) {
-                        System.out.println(remainder + "-" + ++count);
-                        count.notifyAll();
-                        count.wait();
-                    }else {
-                        count.wait();
+                    if (index%3 == remainder && count < 100) {
+                        System.out.println(name + "-" + ++count);
+
+                    }
+
+                    if(count == 100){
+                        return;
+                    }
+                    try {
+                        obj.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
 
@@ -47,12 +62,10 @@ public class WaitTest2 {
 
         }
 
-        public MyWaitTest(String name) {
+        public MyWaitThread(String name) {
             super(name);
         }
 
 
     }
-
-
 }
