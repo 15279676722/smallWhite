@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class TypeConversionUtils{
     /** 字符串  **/
-    private static final String TYPE_STRING_FULL = "java.lang.String";
+    private static final String TYPE_STRING_FULL = "java.java.lang.String";
     private static final String TYPE_STRING = "String";
     /** 整型 **/
     private static final String TYPE_INT_FULL = "java.lang.Integer";

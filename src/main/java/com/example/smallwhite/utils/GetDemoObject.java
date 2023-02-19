@@ -47,7 +47,7 @@ public class GetDemoObject {
 
     private static Object RandomValue(String type) {
         switch (type) {
-            case "java.lang.String":
+            case "java.java.lang.String":
                 return RandomString();
             case "java.sql.Timestamp":
                 return new Timestamp(System.currentTimeMillis());
