@@ -93,3 +93,132 @@ Mixed GC是G1中特有的概念，说白了，就是说在G1中，一旦老年�
 
 
 ![image-20230220195435576](../image/image-20230220195435576.png)
+
+
+
+
+
+
+
+
+
+### 内存分配策略
+
+
+
+![image-20230221111125340](../image/image-20230221111125340.png)
+
+
+
+### TLAB
+
+![image-20230221112233354](../image/image-20230221112233354.png)
+
+![image-20230221112252391](../image/image-20230221112252391.png)
+
+![image-20230221112311371](../image/image-20230221112311371.png)
+
+![image-20230221112336711](../image/image-20230221112336711.png)
+
+
+
+**堆是分配对象存储的唯一选择嘛**
+
+#### 逃逸分析
+
+![image-20230221140509581](../image/image-20230221140509581.png)
+
+#### 栈上分配
+
+![image-20230221140601160](../image/image-20230221140601160.png)
+
+```java
+package com.example.smallwhite.jvm.chapter08;
+
+
+/**
+ * -Xmx600m -Xms600m -XX:+PrintGCDetails -XX:-DoEscapeAnalysis
+ *
+ * */
+public class StackAllocation {
+    public static void main(String[] args) {
+        long start = System.currentTimeMillis();
+
+        System.out.println();
+        for (int i = 0; i < 10000000; i++) {
+            User user = new User();
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("花费时间" + (end - start) + "ms");
+    }
+}
+
+class User {
+
+}
+```
+
+关闭逃逸分析的情况下是产生了一次GC的 并且对象都分配在堆上
+
+```
+[GC (Allocation Failure) [PSYoungGen: 153600K->1482K(179200K)] 153600K->1490K(588800K), 0.0016893 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] 
+花费时间103ms
+Heap
+ PSYoungGen      total 179200K, used 24687K [0x00000007b3800000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 153600K, 15% used [0x00000007b3800000,0x00000007b4ea9120,0x00000007bce00000)
+  from space 25600K, 5% used [0x00000007bce00000,0x00000007bcf72b98,0x00000007be700000)
+  to   space 25600K, 0% used [0x00000007be700000,0x00000007be700000,0x00000007c0000000)
+ ParOldGen       total 409600K, used 8K [0x000000079a800000, 0x00000007b3800000, 0x00000007b3800000)
+  object space 409600K, 0% used [0x000000079a800000,0x000000079a802000,0x00000007b3800000)
+ Metaspace       used 3319K, capacity 4500K, committed 4864K, reserved 1056768K
+  class space    used 362K, capacity 388K, committed 512K, reserved 1048576K
+
+```
+
+开启逃逸分析的情况没有产生GC因为对象没有分配在堆上 且运行时间明显缩短
+
+```
+花费时间8ms
+Heap
+ PSYoungGen      total 179200K, used 24577K [0x00000007b3800000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 153600K, 16% used [0x00000007b3800000,0x00000007b50007b0,0x00000007bce00000)
+  from space 25600K, 0% used [0x00000007be700000,0x00000007be700000,0x00000007c0000000)
+  to   space 25600K, 0% used [0x00000007bce00000,0x00000007bce00000,0x00000007be700000)
+ ParOldGen       total 409600K, used 0K [0x000000079a800000, 0x00000007b3800000, 0x00000007b3800000)
+  object space 409600K, 0% used [0x000000079a800000,0x000000079a800000,0x00000007b3800000)
+ Metaspace       used 3292K, capacity 4500K, committed 4864K, reserved 1056768K
+  class space    used 358K, capacity 388K, committed 512K, reserved 1048576K
+
+```
+
+#### 同步省略
+
+![image-20230221144111850](../image/image-20230221144111850.png)
+
+![image-20230221144234292](../image/image-20230221144234292.png)
+
+> 这种同步写法当然也是有问题的
+
+
+
+
+
+#### 分离对象或标量替换
+
+![image-20230221145106824](../image/image-20230221145106824.png)
+
+
+
+![image-20230221145131654](../image/image-20230221145131654.png)
+
+
+
+
+
+
+
+
+
+![image-20230221151410835](../image/image-20230221151410835.png)
+
+![image-20230221151528993](../image/image-20230221151528993.png)
