@@ -1,10 +1,10 @@
-package com.atguigu.java1;
+package com.example.smallwhite.jvm.chapter16;
 
 import java.lang.ref.SoftReference;
 
 /**
  * 软引用的测试：内存不足即回收
- *
+ * -Xms10m -Xmx10m -XX:+PrintGCDetails
  * @author shkstart  shkstart@126.com
  * @create 2020  16:06
  */
@@ -17,6 +17,7 @@ public class SoftReferenceTest {
 
         public int id;
         public String name;
+        public  byte[] b = new byte[1024 * 1024*4];
 
         @Override
         public String toString() {
@@ -43,13 +44,14 @@ public class SoftReferenceTest {
 //
         try {
             //让系统认为内存资源紧张、不够
-//            byte[] b = new byte[1024 * 1024 * 7];
-            byte[] b = new byte[1024 * 7168 - 635 * 1024];
+            byte[] b = new byte[1024 * 1024 *4];
+
         } catch (Throwable e) {
             e.printStackTrace();
         } finally {
             //再次从软引用中获取数据
-            System.out.println(userSoftRef.get());//在报OOM之前，垃圾回收器会回收软引用的可达对象。
+            //在报OOM之前，垃圾回收器会回收软引用的可达对象。 并且将b对象直接放到老年代中
+            System.out.println(userSoftRef.get());
         }
     }
 }
