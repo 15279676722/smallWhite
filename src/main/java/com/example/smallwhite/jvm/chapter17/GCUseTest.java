@@ -7,7 +7,7 @@ import java.util.ArrayList;
  *
  *  -XX:+UseSerialGC:表明新生代使用Serial GC ，同时老年代使用Serial Old GC
  *
- *  -XX:+UseParNewGC：标明新生代使用ParNew GC
+ *  -XX:+UseParNewGC：标明新生代使用ParNew GC -XX:ParallelGCThreads 设置线程数
  *
  *  -XX:+UseParallelGC:表明新生代使用Parallel GC
  *  -XX:+UseParallelOldGC : 表明老年代使用 Parallel Old GC

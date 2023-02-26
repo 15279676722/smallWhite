@@ -1,4 +1,4 @@
-package com.atguigu.java;
+package com.example.smallwhite.jvm.chapter17;
 
 import java.util.ArrayList;
 

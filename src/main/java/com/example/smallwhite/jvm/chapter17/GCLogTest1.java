@@ -1,4 +1,4 @@
-package com.atguigu.java;
+package com.example.smallwhite.jvm.chapter17;
 
 /**
  * 在jdk7 和 jdk8中分别执行
