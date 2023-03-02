@@ -64,6 +64,42 @@ bean实例化完成后 在初始化bean之前还有两个个步骤
 >
 > 此属性现在已被废弃 这样的话我们不需要对字段设置任何的注入方法也可以实现依赖注入(只是拿到对应的bean 赋值在后续操作中)
 
-#### 2.后续属性处理
+##### 2.后续属性设置
 
-> `InstantiationAwareBeanPostProcessor#postProcessProperties`
+      ###### 1.`InstantiationAwareBeanPostProcessor#postProcessProperties`
+
+1.`CommonAnnotationBeanPostProcessor#postProcessorProperties` 对`@Resource` 注解的变量赋值
+
+2.`AutowiredAnnotationPostProcessor#postProcessorProperties` 对`@Autowired`  `@Value` 注解的变量赋值
+
+###### 2.设置xml中配置的bean属性值
+
+
+
+#### 3.2 initializeBean 初始化bean对象
+
+##### 1.Awre回调
+
+> 调用实现了`BeanNameAware#setBeanName` `BeanClassLoaderAware#setBeanClassLoader` `BeanFactoryAware#setBeanFactory`的方法
+
+##### 2.BeanPostProcessor前置回调
+
+> `ApplicationContextAwareProcessor#postProcessBeforeInitialization`调用实现了 `EnvironmentAware#setEnvironment` `EmbeddedValueResolverAware#setEmbeddedValueResolver` `ResourceLoaderAware#setResourceLoader` `ApplicationEventPublisherAware#setApplicationEventPublisher` `MessageSourceAware#setMessageSource` `ApplicationContextAware#setApplicationContext` 的方法
+>
+> `ImportAwareBeanPostProcessor#postProcessBeforeInitialization` 调用实现了`ImportAware#setImportMetadata`的方法
+>
+> 
+>
+> `InitDestroyAnnotationBeanPostProcessor#postProcessBeforeInitialization` 调用了`@PostConstruct`注解的初始化方法
+
+
+
+##### 3.执行实现了InitializingBean 的afterPropertiesSet初始化方法
+
+##### 4.执行配置了 init-method的初始化方法
+
+##### 5.BeanPostProcessor后置回调
+
+> `AbstractAutoProxyCreator#postProcessAfterInitialization` 这里是生成AOP对象的地方后面在AOP的地方分析
+>
+> `ApplicationListenerDetector#postProcessAfterInitialization` 如果该bean是一个单例监听器bean会把他注册到上下文监听器中
