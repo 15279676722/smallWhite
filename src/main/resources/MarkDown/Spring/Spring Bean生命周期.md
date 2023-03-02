@@ -62,5 +62,8 @@ bean实例化完成后 在初始化bean之前还有两个个步骤
 
 > spring对bean的字段属性的赋值支持自动注入的方式 `@Bean(autowire= Autowire.BY_TYPE)`
 >
-> 此属性现在已被废弃 这样的话我们不需要对字段设置任何的注入方法也可以实现依赖注入
+> 此属性现在已被废弃 这样的话我们不需要对字段设置任何的注入方法也可以实现依赖注入(只是拿到对应的bean 赋值在后续操作中)
 
+#### 2.后续属性处理
+
+> `InstantiationAwareBeanPostProcessor#postProcessProperties`
