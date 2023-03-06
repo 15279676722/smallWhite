@@ -1,12 +1,12 @@
 ### 1.加载beanDefinition  
 
-1.通过BeanDefinitionReader 将xml中配置的bean进行解析 成 beanFactory中的beanDefinitionMap(发生在创建beanFactory之后)
+1.通过`BeanDefinitionReader` 将xml中配置的bean进行解析 成 `beanFactory`中的`beanDefinitionMap`(发生在创建beanFactory之后)
 
-2.或者通过java config配置的@Bean 定义解析成beanFactory中的beanDefinitionMap(发生在执行BeanFactoryPostProcessor的回调过程 具体点就是BeanDefinitionRegistryPostProcessor 的postProcessBeanDefinitionRegistry方法)
+2.或者通过java config配置的`@Bean` 定义解析成`beanFactory`中的`beanDefinitionMap`(发生在执行`BeanFactoryPostProcessor`的回调过程 具体点就是`BeanDefinitionRegistryPostProcessor` 的`postProcessBeanDefinitionRegistry`方法)
 
 > xml 配置 同一个xml文件 id不重复 多个xml文件中允许重复会覆盖
 >
-> java配置中 同一个@Configuration中允许重复 后面的覆盖前面的 
+> java配置中 同一个`@Configuration`中允许重复 后面的覆盖前面的 
 
 ### 2.bean的实例化 
 
@@ -18,13 +18,13 @@
 
 1.构造方法
 
-- 匹配构造方法 默认无参构造    AutowiredAnnotationBeanPostProcessor#determineCandidateConstructors 匹配构造方法 优先匹配@Autowired修饰的构造方法，一个bean对象只能有一个@Autowired修饰的构造方法 出现多个会报错(如果是被@Lookup 或者<replace-method> 修饰过的则会利用CgLib生成代理对象)
+- 匹配构造方法 默认无参构造    `AutowiredAnnotationBeanPostProcessor#determineCandidateConstructors` 匹配构造方法 优先匹配@Autowired修饰的构造方法，一个bean对象只能有一个@Autowired修饰的构造方法 出现多个会报错(如果是被@Lookup 或者<replace-method> 修饰过的则会利用CgLib生成代理对象)
 
   > 也可以自定义实现`SmartInstantiationAwareBeanPostProcessor#determineCandidateConstructors`指定使用的构造方法 而不受Spring的限制
 
 - 根据匹配到的构造方法来实例化对象。如果是默认的无参构造方法 利用反射创建一个bean对象
 
-  如果是@Autowired修饰的构造方法 或者 是xml中配置的<constructor-arg> 配置的构造器参数   就会提前进行依赖注入操作
+  如果是`@Autowired`修饰的构造方法 或者 是xml中配置的<constructor-arg> 配置的构造器参数   就会提前进行依赖注入操作
 
 ### 3.bean的初始化 
 
@@ -66,7 +66,7 @@ bean实例化完成后 在初始化bean之前还有两个个步骤
 
 ##### 2.后续属性设置
 
-      ###### 1.`InstantiationAwareBeanPostProcessor#postProcessProperties`
+###### 1.`InstantiationAwareBeanPostProcessor#postProcessProperties`
 
 1.`CommonAnnotationBeanPostProcessor#postProcessorProperties` 对`@Resource` 注解的变量赋值
 
@@ -88,8 +88,6 @@ bean实例化完成后 在初始化bean之前还有两个个步骤
 >
 > `ImportAwareBeanPostProcessor#postProcessBeforeInitialization` 调用实现了`ImportAware#setImportMetadata`的方法
 >
-> 
->
 > `InitDestroyAnnotationBeanPostProcessor#postProcessBeforeInitialization` 调用了`@PostConstruct`注解的初始化方法
 
 
@@ -103,3 +101,23 @@ bean实例化完成后 在初始化bean之前还有两个个步骤
 > `AbstractAutoProxyCreator#postProcessAfterInitialization` 这里是生成AOP对象的地方后面在AOP的地方分析
 >
 > `ApplicationListenerDetector#postProcessAfterInitialization` 如果该bean是一个单例监听器bean会把他注册到上下文监听器中
+
+#### 3.3注册bean的销毁
+
+> 1.实现了`DisposableBean`接口
+>
+> 2.有`@PreDestroy` 的方法
+>
+> 3.bean中配置了destory-method
+>
+> 4.实现了`DestructionAwareBeanPostProcessor`
+
+### 4.bean的销毁回调
+
+> 1.实现了`DestructionAwareBeanPostProcessor#postProcessBeforeDestruction`回调
+>
+> 2.注解了`@PreDestroy` 会通过 `CommonAnnotationBeanPostProcessor#postProcessBeforeDestruction`方法进行销毁后置回调
+>
+> 3.实现了`DisposableBean#destroy`方法的回调
+>
+> 2.bean中配置了destory-method的回调
