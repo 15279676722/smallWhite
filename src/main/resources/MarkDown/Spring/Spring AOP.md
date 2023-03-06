@@ -104,6 +104,8 @@ class AspectJAutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 
 可以看到目前Spring只定义了一个`AnnotationAwareAspectJAutoProxyCreator`类型的bean 然后后续由Spring容器生成
 
+>所以如果我们想要开启AOP 也可以通过将bean `AnnotationAwareAspectJAutoProxyCreator`注入到Spring容器中来实现
+
 ### 2.`AnnotationAwareAspectJAutoProxyCreator`
 
 接下来来看`AnnotationAwareAspectJAutoProxyCreator` 这个bean的实现
@@ -124,7 +126,148 @@ class AspectJAutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 
 > 是否实现了`Advice` `Pointcut` `Advisor` 或者类上有 `@Aspect` 注解的认为是AOP基础类
 
-**创建代理对象的地方**
+#### 2.创建代理对象的地方
 
 > `AbstractAutoProxyCreator#postProcessAfterInitialization` bean的初始化后置处理
+
+```java
+@Override
+public Object postProcessAfterInitialization(@Nullable Object bean, String beanName) {
+   if (bean != null) {
+      Object cacheKey = getCacheKey(bean.getClass(), beanName);
+      if (this.earlyProxyReferences.remove(cacheKey) != bean) {
+         return wrapIfNecessary(bean, beanName, cacheKey);
+      }
+   }
+   return bean;
+}
+```
+
+```java
+protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {
+   if (StringUtils.hasLength(beanName) && this.targetSourcedBeans.contains(beanName)) {
+      return bean;
+   }
+   if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
+      return bean;
+   }
+   if (isInfrastructureClass(bean.getClass()) || shouldSkip(bean.getClass(), beanName)) {
+      this.advisedBeans.put(cacheKey, Boolean.FALSE);
+      return bean;
+   }
+
+   // Create proxy if we have advice.
+   Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
+   if (specificInterceptors != DO_NOT_PROXY) {
+      this.advisedBeans.put(cacheKey, Boolean.TRUE);
+      Object proxy = createProxy(
+            bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));
+      this.proxyTypes.put(cacheKey, proxy.getClass());
+      return proxy;
+   }
+
+   this.advisedBeans.put(cacheKey, Boolean.FALSE);
+   return bean;
+}
+```
+
+`getAdvicesAndAdvisorsForBean` 方法
+
+```java
+protected Object[] getAdvicesAndAdvisorsForBean(
+      Class<?> beanClass, String beanName, @Nullable TargetSource targetSource) {
+
+   List<Advisor> advisors = findEligibleAdvisors(beanClass, beanName);
+   if (advisors.isEmpty()) {
+      return DO_NOT_PROXY;
+   }
+   return advisors.toArray();
+}
+protected List<Advisor> findEligibleAdvisors(Class<?> beanClass, String beanName) {
+		List<Advisor> candidateAdvisors = findCandidateAdvisors();
+		List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
+		extendAdvisors(eligibleAdvisors);
+		if (!eligibleAdvisors.isEmpty()) {
+			eligibleAdvisors = sortAdvisors(eligibleAdvisors);
+		}
+		return eligibleAdvisors;
+	}
+```
+
+```java
+public List<Advisor> buildAspectJAdvisors() {
+   List<String> aspectNames = this.aspectBeanNames;
+
+   if (aspectNames == null) {
+      synchronized (this) {
+         aspectNames = this.aspectBeanNames;
+         if (aspectNames == null) {
+            List<Advisor> advisors = new ArrayList<>();
+            aspectNames = new ArrayList<>();
+            String[] beanNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
+                  this.beanFactory, Object.class, true, false);
+            for (String beanName : beanNames) {
+               if (!isEligibleBean(beanName)) {
+                  continue;
+               }
+               // We must be careful not to instantiate beans eagerly as in this case they
+               // would be cached by the Spring container but would not have been weaved.
+               Class<?> beanType = this.beanFactory.getType(beanName, false);
+               if (beanType == null) {
+                  continue;
+               }
+               //是否带有@Aspect 和非ajc编译的类
+               if (this.advisorFactory.isAspect(beanType)) {
+                  aspectNames.add(beanName);
+                  AspectMetadata amd = new AspectMetadata(beanType, beanName);//创建切面元数据
+                  if (amd.getAjType().getPerClause().getKind() == PerClauseKind.SINGLETON) {
+                     MetadataAwareAspectInstanceFactory factory =
+                           new BeanFactoryAspectInstanceFactory(this.beanFactory, beanName);
+                     List<Advisor> classAdvisors = this.advisorFactory.getAdvisors(factory);
+                     if (this.beanFactory.isSingleton(beanName)) {
+                        this.advisorsCache.put(beanName, classAdvisors);
+                     }
+                     else {
+                        this.aspectFactoryCache.put(beanName, factory);
+                     }
+                     advisors.addAll(classAdvisors);
+                  }
+                  else {
+                     // Per target or per this.
+                     if (this.beanFactory.isSingleton(beanName)) {
+                        throw new IllegalArgumentException("Bean with name '" + beanName +
+                              "' is a singleton, but aspect instantiation model is not singleton");
+                     }
+                     MetadataAwareAspectInstanceFactory factory =
+                           new PrototypeAspectInstanceFactory(this.beanFactory, beanName);
+                     this.aspectFactoryCache.put(beanName, factory);
+                     advisors.addAll(this.advisorFactory.getAdvisors(factory));
+                  }
+               }
+            }
+            this.aspectBeanNames = aspectNames;
+            return advisors;
+         }
+      }
+   }
+
+   if (aspectNames.isEmpty()) {
+      return Collections.emptyList();
+   }
+   List<Advisor> advisors = new ArrayList<>();
+   for (String aspectName : aspectNames) {
+      List<Advisor> cachedAdvisors = this.advisorsCache.get(aspectName);
+      if (cachedAdvisors != null) {
+         advisors.addAll(cachedAdvisors);
+      }
+      else {
+         MetadataAwareAspectInstanceFactory factory = this.aspectFactoryCache.get(aspectName);
+         advisors.addAll(this.advisorFactory.getAdvisors(factory));
+      }
+   }
+   return advisors;
+}
+```
+
+其实在 `@Aspect` 下的配置 都由 AnnotationAwareAspectJAutoProxyCreator来进行解析
 
