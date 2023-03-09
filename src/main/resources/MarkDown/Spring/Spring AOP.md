@@ -1,3 +1,7 @@
+三种实现AOP的方式
+
+## `@EnableAspectJAutoProxy` + `@Aspect`
+
 ### 1.`@EnableAspectJAutoProxy`
 
 > Spring AOP的开关是靠`@EnableAspectJAutoProxy`开启的。我们可以从这个注解开始去看AOP的整个过程
@@ -271,3 +275,4 @@ public List<Advisor> buildAspectJAdvisors() {
 
 其实在 `@Aspect` 下的配置 都由 AnnotationAwareAspectJAutoProxyCreator来进行解析
 
+## BeanName
