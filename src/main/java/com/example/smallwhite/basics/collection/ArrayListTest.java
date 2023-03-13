@@ -51,6 +51,7 @@ public class ArrayListTest {
         list.add("test_01");
         list.add("test_02");
         list.add("test_03");
+        list.add(20,"1");
 //        for (int i = 0; i < list.size(); i++) {
 //            System.out.println(list.remove(list.get(i)));//并发修改异常
 //        }
