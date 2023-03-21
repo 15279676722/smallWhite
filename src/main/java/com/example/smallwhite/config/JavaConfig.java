@@ -42,12 +42,11 @@ public class JavaConfig {
      */
     @Bean
     public RedisService redisService(RedisTemplate redisTemplate) {
-        RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-        JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
-        redisTemplate.setKeySerializer(stringSerializer);
-        redisTemplate.setValueSerializer(stringSerializer);
-        redisTemplate.setHashKeySerializer(stringSerializer);
-        redisTemplate.setHashValueSerializer(stringSerializer);
+        RedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        redisTemplate.setKeySerializer(stringRedisSerializer);
+        redisTemplate.setValueSerializer(stringRedisSerializer);
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashValueSerializer(stringRedisSerializer);
         return new RedisService(redisTemplate);
     }
     /**

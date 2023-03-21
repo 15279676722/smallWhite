@@ -2,29 +2,59 @@ package com.example.smallwhite.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+import java.util.concurrent.locks.ReentrantLock;
 
-public  class RedisService {
-    Logger log= LoggerFactory.getLogger(RedisService.class.getName());
+public class RedisService extends AbstractQueuedSynchronizer {
+    Logger log = LoggerFactory.getLogger(RedisService.class.getName());
 
     private final RedisTemplate<String, Object> redisTemplate;
+
+    private final String UNLOCK_SCRIPT = "if redis.call('get',KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else return 0 end";
+
 
     public RedisService(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
+
+    private ThreadLocal<String> threadLocal = new ThreadLocal<>();
+
+
+
+
+
     /**
      * 分布式锁
-     * */
-//    public boolean setNx(String key,String value){
-//        return redisTemplate.opsForValue().setIfAbsent()
-//    }
+     */
+    public boolean setNx(String key) {
+        threadLocal.set(Thread.currentThread().getName());
+        return redisTemplate.opsForValue().setIfAbsent(key, Thread.currentThread().getName(), 10, TimeUnit.SECONDS);
+    }
+
+    public boolean look(String key) {
+        return setNx(key);
+    }
+
+    public void tryLook(String key) {
+        while (!setNx(key)){
+
+        }
+    }
+
+
+
+    public Boolean unLook(String key) {
+        RedisScript<Boolean> redisScript = new DefaultRedisScript(UNLOCK_SCRIPT, Boolean.class);
+        return redisTemplate.execute(redisScript, Arrays.asList(key), threadLocal.get());
+    }
+
     /**
      * 指定缓存失效时间
      *
@@ -48,6 +78,7 @@ public  class RedisService {
      * 根据key 获取过期时间
      * TTL 查看过期时间 单位s
      * PTTL查看过期时间 单位ms
+     *
      * @param key 键 不能为null
      * @return 时间(秒) 返回0代表为永久有效
      */
@@ -59,6 +90,7 @@ public  class RedisService {
     /**
      * 判断key是否存在
      * exists
+     *
      * @param key 键
      * @return true 存在 false不存在
      */
@@ -86,16 +118,17 @@ public  class RedisService {
             }
         }
     }
+
     /**
      * 删除缓存
      *
-     * @param  keys 传List集合
+     * @param keys 传List集合
      */
-    public void del(List<String> keys){
-        if(keys.size()==0){
+    public void del(List<String> keys) {
+        if (keys.size() == 0) {
             return;
         }
-        keys.forEach(key->{
+        keys.forEach(key -> {
             redisTemplate.delete(key);
         });
     }
@@ -110,26 +143,27 @@ public  class RedisService {
     public Object get(String key) {
         return key == null ? null : redisTemplate.opsForValue().get(key);
     }
+
     /**
      * 普通缓存对象获取
      *
-     * @param key 键
+     * @param key   键
      * @param clazz
      * @return 值
      */
-    public <T> T get(String key, Class<T> clazz){
-        if(key == null){
+    public <T> T get(String key, Class<T> clazz) {
+        if (key == null) {
             return null;
         } else {
             T t = null;
             try {
-                 t = clazz.newInstance();
+                t = clazz.newInstance();
 
-                if(redisTemplate.opsForValue().get(key) == null){
+                if (redisTemplate.opsForValue().get(key) == null) {
                     return t;
                 }
-                if(clazz.getName().equals(redisTemplate.opsForValue().get(key) .getClass().getName())){
-                    return (T)redisTemplate.opsForValue().get(key);
+                if (clazz.getName().equals(redisTemplate.opsForValue().get(key).getClass().getName())) {
+                    return (T) redisTemplate.opsForValue().get(key);
                 }
                 throw new BaseBusinessException(ResultCodeEnum.CAST_CLASS_ERROR);
             } catch (IllegalAccessException e) {
@@ -140,6 +174,7 @@ public  class RedisService {
             return t;
         }
     }
+
     /**
      * 普通缓存获取
      *
@@ -147,13 +182,13 @@ public  class RedisService {
      * @return values
      */
     public Object get(List<String> keys) {
-        List<Map<String,Object>> resultList = new ArrayList<>();
-        if(keys.size()==0){
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        if (keys.size() == 0) {
             return resultList;
         }
-        keys.forEach(key->{
-            Map<String,Object> map = new HashMap<>();
-            map.put(key,redisTemplate.opsForValue().get(key));
+        keys.forEach(key -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put(key, redisTemplate.opsForValue().get(key));
             resultList.add(map);
         });
         return resultList;
@@ -203,8 +238,8 @@ public  class RedisService {
     /**
      * 递增
      *
-     * @param key 键
-     * @param delta  要增加几(大于0)
+     * @param key   键
+     * @param delta 要增加几(大于0)
      * @return
      */
     public long incr(String key, long delta) {
@@ -217,8 +252,8 @@ public  class RedisService {
     /**
      * 递减
      *
-     * @param key 键
-     * @param delta  要减少几(小于0)
+     * @param key   键
+     * @param delta 要减少几(小于0)
      * @return
      */
     public long decr(String key, long delta) {
@@ -642,9 +677,8 @@ public  class RedisService {
 
     /**
      * 向有序集合添加一个成员的
-     *
+     * <p>
      * ZADD key score1 member1 [score2 member2]
-     *
      */
     public boolean zadd(String key, Object member, double score, long time) {
         try {
@@ -660,9 +694,8 @@ public  class RedisService {
     }
 
     /**
-     * 	ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]
-     通过分数返回有序集合指定区间内的成员
-     *
+     * ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT]
+     * 通过分数返回有序集合指定区间内的成员
      */
     public Set<Object> zRangeByScore(String key, double minScore, double maxScore) {
         try {
@@ -674,9 +707,8 @@ public  class RedisService {
     }
 
     /**
-     * 	ZSCORE key member
-     返回有序集中，成员的分数值
-     *
+     * ZSCORE key member
+     * 返回有序集中，成员的分数值
      */
     public Double zscore(String key, Object member) {
         try {
@@ -688,8 +720,7 @@ public  class RedisService {
     }
 
     /**
-     * 	ZRANK key member 返回有序集合中指定成员的索引
-     *
+     * ZRANK key member 返回有序集合中指定成员的索引
      */
     public Long zrank(String key, Object member) {
         try {
@@ -702,7 +733,6 @@ public  class RedisService {
 
     /**
      * Zscan 迭代有序集合中的元素（包括元素成员和元素分值）
-     *
      */
     public Cursor<ZSetOperations.TypedTuple<Object>> zscan(String key) {
         try {

@@ -15,15 +15,15 @@ spring:
   servlet:
     multipart:
       max-file-size: 100MB
-#  redis:
-#    host: 127.0.0.1
-#    port: 6379
-#    jedis:
-#      pool:
-#        max-active: 500
-#        max-idle: 1000
-#        max-wait: 6000ms
-#        min-idle: 4
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 500
+        max-idle: 1000
+        max-wait: 6000ms
+        min-idle: 4
 #    sentinel:
 #      master: yqtestMaster
 #      nodes: 127.0.0.1:7009,127.0.0.1:7010,127.0.0.1:7011
